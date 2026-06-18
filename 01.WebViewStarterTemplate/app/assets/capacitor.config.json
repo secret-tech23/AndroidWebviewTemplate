@@ -1,0 +1,26 @@
+{
+  "$schema": "https://capacitorjs.com/docs/assets/capacitor-config-schema.json",
+  "appId": "com.yourcompany.impulsebin",
+  "appName": "ImpulseBin",
+  "webDir": ".",
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#0A0A0A",
+      "overlaysWebView": false
+    },
+    "SplashScreen": {
+      "launchShowDuration": 0,
+      "backgroundColor": "#0A0A0A"
+    }
+  },
+  "android": {
+    "overScrollMode": "never",
+    "allowMixedContent": false,
+    "captureInput": false,
+    "webContentsDebuggingEnabled": false
+  }
+}

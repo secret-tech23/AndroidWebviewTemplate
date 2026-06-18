@@ -1,1 +1,242 @@
-1
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#0A0A0A" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>ImpulseBin</title>
+  <link rel="stylesheet" href="styles.css" />
+
+  <!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║              CAPACITOR SETUP INSTRUCTIONS                    ║
+  ║                                                              ║
+  ║  1. INSTALL CAPACITOR                                        ║
+  ║     npm install @capacitor/core @capacitor/cli               ║
+  ║     npm install @capacitor/haptics @capacitor/status-bar     ║
+  ║     npm install @capacitor/android                           ║
+  ║                                                              ║
+  ║  2. INITIALISE PROJECT                                       ║
+  ║     npx cap init "ImpulseBin" "com.yourcompany.impulsebin"   ║
+  ║                                                              ║
+  ║  3. SET webDir IN capacitor.config.json                      ║
+  ║     "webDir": "."  (or the folder this index.html is in)    ║
+  ║                                                              ║
+  ║  4. ADD ANDROID PLATFORM                                     ║
+  ║     npx cap add android                                      ║
+  ║                                                              ║
+  ║  5. BUILD / SYNC                                             ║
+  ║     npx cap sync android                                     ║
+  ║     npx cap open android   ← opens Android Studio           ║
+  ║                                                              ║
+  ║  6. PLUGINS USED                                             ║
+  ║     - @capacitor/haptics  → HapticsPlugin.impact()           ║
+  ║     - @capacitor/status-bar → StatusBar.setStyle()           ║
+  ║                                                              ║
+  ║  7. PULL-TO-REFRESH DISABLED                                 ║
+  ║     - CSS: overscroll-behavior: none on html + body          ║
+  ║     - JS:  touchmove preventDefault at scroll top            ║
+  ║     - capacitor.config.json: android.overScrollMode "never"  ║
+  ╚══════════════════════════════════════════════════════════════╝
+  -->
+</head>
+<body>
+
+  <!-- ── HEADER ─────────────────────────────────────────────── -->
+  <header class="app-header">
+    <div class="header-left">
+      <span class="app-logo">⚡</span>
+      <span class="app-name">ImpulseBin</span>
+    </div>
+    <div class="header-right">
+
+      <!-- Strict Mode toggle -->
+      <button class="icon-btn strict-btn" id="btn-strict"
+              title="Strict Mode" aria-label="Strict Mode" aria-pressed="false">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </button>
+
+      <!-- Language selector -->
+      <select class="lang-select" id="lang-select" aria-label="Мова">
+        <option value="uk">🇺🇦 UA</option>
+        <option value="en">🇬🇧 EN</option>
+        <option value="pl">🇵🇱 PL</option>
+        <option value="de">🇩🇪 DE</option>
+        <option value="fr">🇫🇷 FR</option>
+        <option value="es">🇪🇸 ES</option>
+        <option value="zh">🇨🇳 ZH</option>
+      </select>
+
+      <!-- Export -->
+      <button class="icon-btn" id="btn-export" title="Експорт даних" aria-label="Експорт">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+      </button>
+
+      <!-- Archive -->
+      <button class="icon-btn" id="btn-archive" title="Архів імпульсів" aria-label="Архів">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="5" rx="1"/>
+          <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/>
+          <line x1="10" y1="12" x2="14" y2="12"/>
+        </svg>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- ── MAIN SCREEN ────────────────────────────────────────── -->
+  <main id="screen-main" class="screen active">
+
+    <!-- Savings Hero -->
+    <section class="savings-hero">
+      <span class="savings-label" id="hero-label">Не витрачено</span>
+      <div class="savings-amount" id="hero-amount">₴0</div>
+      <span class="savings-sub" id="hero-sub">за весь час</span>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-pill">
+        <span class="stat-val" id="stat-active">0</span>
+        <span class="stat-lbl" id="stat-active-label">активних</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-val gold" id="stat-done">0</span>
+        <span class="stat-lbl" id="stat-done-label">виконано</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-val red" id="stat-canceled">0</span>
+        <span class="stat-lbl" id="stat-canceled-label">відмін</span>
+      </div>
+    </div>
+
+    <!-- Impulse List -->
+    <section class="list-section">
+      <div class="list-header">
+        <h2 class="list-title" id="list-title-active">Мої імпульси</h2>
+        <span class="pro-badge" id="pro-badge" style="display:none">PRO</span>
+        <span class="limit-badge" id="limit-badge"></span>
+      </div>
+      <div id="impulse-list" class="impulse-list" role="list"></div>
+      <div id="empty-state" class="empty-state" style="display:none">
+        <div class="empty-icon">💸</div>
+        <p id="empty-text">Ще немає імпульсів. Додай перший!</p>
+      </div>
+    </section>
+
+    <!-- FAB: Add Impulse -->
+    <button class="fab" id="btn-add" aria-label="Додати імпульс">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.5">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </button>
+  </main>
+
+  <!-- ── ARCHIVE SCREEN ─────────────────────────────────────── -->
+  <main id="screen-archive" class="screen">
+    <div class="screen-nav">
+      <button class="back-btn" id="btn-back-archive" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        <span id="btn-back-label">Назад</span>
+      </button>
+      <h2 id="archive-title">📦 Архів</h2>
+    </div>
+    <div id="archive-list" class="impulse-list" role="list"></div>
+    <div id="archive-empty" class="empty-state" style="display:none">
+      <div class="empty-icon">🕊️</div>
+      <p id="archive-empty-text">Архів порожній.</p>
+    </div>
+  </main>
+
+  <!-- ── MODAL: Add Impulse ────────────────────────────────── -->
+  <div class="modal-overlay" id="modal-add"
+       role="dialog" aria-modal="true" aria-labelledby="modal-title"
+       style="display:none">
+    <div class="modal-sheet">
+      <div class="modal-drag-handle"></div>
+      <h3 class="modal-title" id="modal-title">Новий імпульс</h3>
+      <p class="modal-hint" id="modal-hint">Опиши, що хочеш купити, і встанови паузу.</p>
+
+      <!-- Strict mode notice (shown only when strict mode is ON) -->
+      <div class="strict-notice" id="strict-notice" style="display:none" role="alert">
+        <svg width="13" height="13" viewBox="0 0 24 24"
+             fill="rgba(255,68,68,0.5)" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span id="strict-notice-text">Суворий режим: відмова недоступна</span>
+      </div>
+
+      <label class="field-label" for="input-text" id="label-text">
+        Що ти хочеш купити?
+      </label>
+      <input class="field-input" id="input-text" type="text"
+             placeholder="Нові навушники, гра..." autocomplete="off" maxlength="80" />
+
+      <label class="field-label" for="input-amount" id="label-amount">
+        Сума (₴)
+      </label>
+      <input class="field-input" id="input-amount" type="number"
+             placeholder="0" min="0" step="1" inputmode="decimal" />
+
+      <label class="field-label" id="label-delay">Затримка перед покупкою</label>
+      <div class="delay-grid">
+        <button class="delay-chip active" data-hours="1"   id="delay-1h">1 год</button>
+        <button class="delay-chip"        data-hours="6"   id="delay-6h">6 год</button>
+        <button class="delay-chip"        data-hours="24"  id="delay-24h">24 год</button>
+        <button class="delay-chip"        data-hours="72"  id="delay-72h">3 дні</button>
+        <button class="delay-chip"        data-hours="168" id="delay-168h">7 днів</button>
+        <button class="delay-chip"        data-hours="720" id="delay-720h">30 днів</button>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-secondary" id="btn-cancel-modal">Скасувати</button>
+        <button class="btn-primary"   id="btn-save-impulse">Заблокувати 🔒</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MODAL: Upgrade to Pro ─────────────────────────────── -->
+  <div class="modal-overlay" id="modal-pro"
+       role="dialog" aria-modal="true" aria-labelledby="pro-title"
+       style="display:none">
+    <div class="modal-sheet modal-pro-sheet">
+      <div class="modal-drag-handle"></div>
+      <div class="pro-star">⭐</div>
+      <h3 class="modal-title" id="pro-title">ImpulseBin Pro</h3>
+      <p class="pro-desc" id="pro-desc">Безлімітні імпульси та експорт даних.</p>
+      <ul class="pro-features" id="pro-features">
+        <li>✅ Необмежена кількість імпульсів</li>
+        <li>✅ Експорт даних у JSON</li>
+        <li>✅ Розширена статистика</li>
+        <li>✅ Без реклами назавжди</li>
+      </ul>
+      <button class="btn-primary btn-pro-cta" id="btn-pro-buy">Оновити до Pro</button>
+      <button class="btn-ghost" id="btn-pro-close">Залишитись у Free</button>
+    </div>
+  </div>
+
+  <!-- ── TOAST ─────────────────────────────────────────────── -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
