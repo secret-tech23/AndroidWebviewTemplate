@@ -1,152 +1,469 @@
-  <!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#0A0A0A" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>ImpulseBin</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div id="app">
 
-    <!-- HEADER -->
-    <header class="app-header">
-      <div class="header-left">
-        <div class="app-logo">⚡</div>
-        <div class="app-name">ImpulseBin</div>
+  <!-- ── HEADER ──────────────────────────────────────────── -->
+  <header class="app-header">
+    <div class="header-left">
+      <svg class="app-logo-svg" width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M13 2L4.5 13.5H12L11 22L19.5 10.5H12L13 2Z"
+              fill="#FFD700" stroke="#FFD700" stroke-width="1"
+              stroke-linejoin="round"/>
+      </svg>
+      <span class="app-name">ImpulseBin</span>
+    </div>
+    <div class="header-right">
+      <button class="icon-btn strict-btn" id="btn-strict"
+              title="Strict Mode" aria-label="Strict Mode" aria-pressed="false">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="btn-export" title="Експорт" aria-label="Експорт">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="btn-archive" title="Архів" aria-label="Архів">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="3" width="20" height="5" rx="1"/>
+          <path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/>
+          <line x1="10" y1="12" x2="14" y2="12"/>
+        </svg>
+      </button>
+      <button class="icon-btn" id="btn-settings" title="Налаштування" aria-label="Налаштування">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── MAIN SCREEN ─────────────────────────────────────── -->
+  <main id="screen-main" class="screen active">
+
+    <!-- Savings Hero -->
+    <section class="savings-hero">
+      <span class="savings-label" id="hero-label">Не витрачено</span>
+      <div class="savings-amount" id="hero-amount">₴0</div>
+      <span class="savings-sub" id="hero-sub">за весь час</span>
+    </section>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar">
+      <div class="stat-pill">
+        <span class="stat-val" id="stat-active">0</span>
+        <span class="stat-lbl" id="stat-active-label">активних</span>
       </div>
-      <div class="header-right">
-        <select id="lang-select" class="lang-select">
-          <option value="en">🇬🇧 EN</option>
-          <option value="uk">🇺🇦 UA</option>
-          <option value="pl">🇵🇱 PL</option>
-          <option value="de">🇩🇪 DE</option>
-          <option value="fr">🇫🇷 FR</option>
-          <option value="es">🇪🇸 ES</option>
-          <option value="zh">🇨🇳 ZH</option>
+      <div class="stat-pill">
+        <span class="stat-val gold" id="stat-done">0</span>
+        <span class="stat-lbl" id="stat-done-label">куплено</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-val green" id="stat-canceled">0</span>
+        <span class="stat-lbl" id="stat-canceled-label">збережено</span>
+      </div>
+    </div>
+
+    <!-- Action Row: Achievements + Statistics -->
+    <div class="action-row">
+      <button class="action-pill" id="btn-achievements">
+        <!-- Trophy icon -->
+        <svg class="action-pill-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 9H2V4h4"/>
+          <path d="M18 9h4V4h-4"/>
+          <path d="M6 4v5a6 6 0 0 0 12 0V4H6z"/>
+          <path d="M9 21h6"/><path d="M12 17v4"/>
+        </svg>
+        <span id="btn-ach-label">Ачівки</span>
+        <span class="ach-count-badge" id="ach-count-badge"></span>
+      </button>
+      <button class="action-pill action-pill-pro" id="btn-stats">
+        <!-- Bar chart icon -->
+        <svg class="action-pill-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"/>
+          <line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6"  y1="20" x2="6"  y2="14"/>
+          <line x1="2"  y1="20" x2="22" y2="20"/>
+        </svg>
+        <span id="btn-stats-label">Статистика</span>
+        <span class="action-pro-tag" id="stats-pro-tag">PRO</span>
+      </button>
+    </div>
+
+    <!-- Impulse List -->
+    <section class="list-section">
+      <div class="list-header">
+        <h2 class="list-title" id="list-title-active">Мої імпульси</h2>
+        <span class="pro-badge" id="pro-badge" style="display:none">PRO</span>
+        <span class="limit-badge" id="limit-badge"></span>
+      </div>
+      <div id="impulse-list" class="impulse-list" role="list"></div>
+      <div id="empty-state" class="empty-state" style="display:none">
+        <!-- Vector wallet/coin illustration -->
+        <svg class="empty-svg" viewBox="0 0 96 88" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Outer glow ring -->
+          <circle cx="48" cy="50" r="36" fill="rgba(255,215,0,0.04)" stroke="rgba(255,215,0,0.12)" stroke-width="1.5" stroke-dasharray="5 4"/>
+          <!-- Wallet body -->
+          <rect x="18" y="32" width="60" height="40" rx="10"
+                fill="rgba(255,215,0,0.07)" stroke="rgba(255,215,0,0.28)" stroke-width="1.8"/>
+          <!-- Wallet flap (top) -->
+          <path d="M18 42h60V36a8 8 0 0 0-8-8H26a8 8 0 0 0-8 8v6z"
+                fill="rgba(255,215,0,0.05)" stroke="rgba(255,215,0,0.2)" stroke-width="1.5"/>
+          <!-- Card slot inside -->
+          <rect x="26" y="50" width="22" height="4" rx="2" fill="rgba(255,215,0,0.2)"/>
+          <rect x="26" y="59" width="14" height="3" rx="1.5" fill="rgba(255,215,0,0.12)"/>
+          <!-- Coin pocket -->
+          <rect x="58" y="46" width="14" height="18" rx="6"
+                fill="rgba(255,215,0,0.10)" stroke="rgba(255,215,0,0.25)" stroke-width="1.5"/>
+          <!-- Coin -->
+          <circle cx="65" cy="55" r="5" fill="rgba(255,215,0,0.2)" stroke="rgba(255,215,0,0.45)" stroke-width="1.5"/>
+          <line x1="65" y1="52" x2="65" y2="58" stroke="rgba(255,215,0,0.5)" stroke-width="1.2" stroke-linecap="round"/>
+          <line x1="62.5" y1="55" x2="67.5" y2="55" stroke="rgba(255,215,0,0.5)" stroke-width="1.2" stroke-linecap="round"/>
+          <!-- Floating coin above -->
+          <circle cx="48" cy="14" r="10" fill="rgba(255,215,0,0.10)" stroke="rgba(255,215,0,0.35)" stroke-width="1.8"/>
+          <path d="M48 9v1.5M48 17.5V19M44.5 12h4a1.5 1.5 0 0 1 0 3h-1a1.5 1.5 0 0 0 0 3H52"
+                stroke="rgba(255,215,0,0.55)" stroke-width="1.4" stroke-linecap="round"/>
+          <!-- Sparkles -->
+          <circle cx="22" cy="22" r="2"  fill="rgba(255,215,0,0.18)"/>
+          <circle cx="74" cy="22" r="2"  fill="rgba(255,215,0,0.18)"/>
+          <circle cx="18" cy="70" r="1.5" fill="rgba(255,215,0,0.12)"/>
+          <circle cx="78" cy="70" r="1.5" fill="rgba(255,215,0,0.12)"/>
+        </svg>
+        <p id="empty-text">Ще немає імпульсів. Додай перший!</p>
+      </div>
+    </section>
+
+    <!-- FAB -->
+    <button class="fab" id="btn-add" aria-label="Додати імпульс">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <line x1="12" y1="5" x2="12" y2="19"/>
+        <line x1="5" y1="12" x2="19" y2="12"/>
+      </svg>
+    </button>
+  </main>
+
+  <!-- ── ARCHIVE SCREEN ───────────────────────────────────── -->
+  <main id="screen-archive" class="screen">
+    <div class="screen-nav">
+      <button class="back-btn" id="btn-back-archive" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        <span id="btn-back-label">Назад</span>
+      </button>
+      <h2 id="archive-title">📦 Архів</h2>
+    </div>
+    <div id="archive-list" class="impulse-list" role="list"></div>
+    <div id="archive-empty" class="empty-state" style="display:none">
+      <svg class="empty-svg" viewBox="0 0 80 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="20" width="60" height="44" rx="8" fill="rgba(255,215,0,0.05)" stroke="rgba(255,215,0,0.2)" stroke-width="1.5"/>
+        <rect x="6"  y="10" width="68" height="16" rx="5" fill="rgba(255,215,0,0.07)" stroke="rgba(255,215,0,0.22)" stroke-width="1.5"/>
+        <line x1="34" y1="42" x2="46" y2="42" stroke="rgba(255,215,0,0.35)" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="40" cy="4" r="3" fill="rgba(255,215,0,0.2)"/>
+      </svg>
+      <p id="archive-empty-text">Архів порожній.</p>
+    </div>
+  </main>
+
+  <!-- ── ACHIEVEMENTS SCREEN ─────────────────────────────── -->
+  <main id="screen-achievements" class="screen">
+    <div class="screen-nav">
+      <button class="back-btn" id="btn-back-achievements" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        <span>Назад</span>
+      </button>
+      <h2 id="achievements-screen-title">Ачівки</h2>
+    </div>
+    <div id="achievements-list" class="achievements-grid" role="list"></div>
+  </main>
+
+  <!-- ── STATISTICS SCREEN (PRO) ─────────────────────────── -->
+  <main id="screen-stats" class="screen">
+    <div class="screen-nav">
+      <button class="back-btn" id="btn-back-stats" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        <span>Назад</span>
+      </button>
+      <h2 id="stats-screen-title">Статистика</h2>
+    </div>
+
+    <div class="stats-content">
+      <!-- Big cards row -->
+      <div class="stats-big-row">
+        <div class="stats-big-card gold-card">
+          <div class="stats-big-label" id="stats-label-saved">Не витрачено</div>
+          <div class="stats-big-value gold" id="stat-total-saved">₴0</div>
+          <div class="stats-big-sub" id="stats-label-saved-sub">відмовлені покупки</div>
+        </div>
+        <div class="stats-big-card">
+          <div class="stats-big-label" id="stats-label-spent">Витрачено</div>
+          <div class="stats-big-value" id="stat-total-spent">₴0</div>
+          <div class="stats-big-sub" id="stats-label-spent-sub">свідомі покупки</div>
+        </div>
+      </div>
+
+      <!-- Mini stats pills -->
+      <div class="stats-mini-row">
+        <div class="stats-mini-card">
+          <span class="stats-mini-val green" id="stat-resisted">0</span>
+          <span class="stats-mini-lbl" id="stats-label-resisted">відмовлено</span>
+        </div>
+        <div class="stats-mini-card">
+          <span class="stats-mini-val gold" id="stat-purchased">0</span>
+          <span class="stats-mini-lbl" id="stats-label-purchased">куплено</span>
+        </div>
+        <div class="stats-mini-card">
+          <span class="stats-mini-val" id="stat-total">0</span>
+          <span class="stats-mini-lbl" id="stats-label-total">всього</span>
+        </div>
+      </div>
+
+      <!-- Blocking time card -->
+      <div class="stats-time-card">
+        <div class="stats-time-inner">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="rgba(255,215,0,0.5)" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          <div>
+            <div class="stats-big-label" id="stats-label-time">Час очікування</div>
+            <div class="stats-time-value" id="stat-blocking-time">0хв</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Export button -->
+      <button class="btn-primary stats-export-btn" id="btn-stats-export">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        <span id="btn-export-stats-label">Експортувати статистику</span>
+      </button>
+    </div>
+  </main>
+
+  <!-- ── SETTINGS SCREEN ──────────────────────────────────── -->
+  <main id="screen-settings" class="screen">
+    <div class="screen-nav">
+      <button class="back-btn" id="btn-back-settings" aria-label="Назад">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        <span>Назад</span>
+      </button>
+      <h2 id="settings-screen-title">Налаштування</h2>
+    </div>
+
+    <div class="settings-content">
+
+      <!-- Language -->
+      <section class="settings-section">
+        <h3 class="settings-section-title" id="settings-section-language">Мова</h3>
+        <select class="field-input lang-select-full" id="lang-select" aria-label="Мова">
+          <option value="uk">🇺🇦 Українська</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="pl">🇵🇱 Polski</option>
+          <option value="de">🇩🇪 Deutsch</option>
+          <option value="fr">🇫🇷 Français</option>
+          <option value="es">🇪🇸 Español</option>
+          <option value="zh">🇨🇳 中文</option>
         </select>
-        <button id="btn-strict" class="icon-btn strict-btn" title="Strict Mode" aria-label="Strict Mode">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
-        </button>
-        <button id="btn-export" class="icon-btn" aria-label="Export">📤</button>
-        <button id="btn-archive" class="icon-btn" aria-label="Archive">📦</button>
-      </div>
-    </header>
+      </section>
 
-    <!-- MAIN SCREEN -->
-    <div id="screen-main" class="screen active">
-      <!-- HERO -->
-      <div class="savings-hero">
-        <div class="savings-label" id="hero-label">Saved</div>
-        <div class="savings-amount">
-          <span id="hero-currency">$</span><span id="hero-amount">0</span>
+      <!-- Theme -->
+      <section class="settings-section">
+        <h3 class="settings-section-title" id="settings-section-theme">Тема</h3>
+        <div class="theme-toggle" id="theme-toggle">
+          <div class="theme-slider"></div>
+          <button class="theme-opt active" data-theme="dark" type="button">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <span id="theme-label-dark">Темна</span>
+          </button>
+          <button class="theme-opt" data-theme="light" type="button">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+              <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+              <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+            </svg>
+            <span id="theme-label-light">Світла</span>
+          </button>
         </div>
-        <div class="savings-sub" id="hero-sub">all time</div>
-      </div>
+      </section>
 
-      <!-- STATS -->
-      <div class="stats-bar">
-        <div class="stat-pill">
-          <div class="stat-val" id="stat-active">0</div>
-          <div class="stat-lbl" id="stat-active-label">active</div>
+      <!-- Data / Reset -->
+      <section class="settings-section">
+        <h3 class="settings-section-title" id="settings-section-data">Дані</h3>
+        <div class="settings-danger-card">
+          <div class="settings-danger-text">
+            <div class="settings-danger-title" id="settings-reset-title">Скинути прогрес</div>
+            <div class="settings-danger-desc" id="settings-reset-desc">Видаляє всі імпульси та збережену суму. Ачівки залишаться.</div>
+          </div>
+          <button class="btn-danger-full" id="btn-reset-progress">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"/>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+            <span id="btn-reset-progress-label">Скинути весь прогрес</span>
+          </button>
         </div>
-        <div class="stat-pill">
-          <div class="stat-val" id="stat-done">0</div>
-          <div class="stat-lbl" id="stat-done-label">done</div>
-        </div>
-        <div class="stat-pill">
-          <div class="stat-val" id="stat-canceled">0</div>
-          <div class="stat-lbl" id="stat-canceled-label">skipped</div>
-        </div>
-      </div>
+      </section>
 
-      <!-- LIST -->
-      <div class="list-section">
-        <div class="list-header">
-          <div class="list-title" id="list-title-active">My Impulses</div>
-          <div id="pro-badge" class="pro-badge" style="display:none;">PRO</div>
-          <div id="limit-badge" class="limit-badge"></div>
-        </div>
-
-        <div id="impulse-list" class="impulse-list"></div>
-
-        <div id="empty-state" class="empty-state">
-          <div class="empty-icon">💸</div>
-          <p id="empty-text">No impulses yet. Add your first!</p>
-        </div>
-      </div>
-
-      <button id="btn-add" class="fab" aria-label="Add impulse">+</button>
     </div>
+  </main>
 
-    <!-- ARCHIVE SCREEN -->
-    <div id="screen-archive" class="screen">
-      <div class="screen-nav">
-        <button id="btn-back-archive" class="back-btn">← <span id="btn-back-label">Back</span></button>
-        <h2 id="archive-title">📦 Archive</h2>
-      </div>
-      <div class="list-section">
-        <div id="archive-list" class="impulse-list"></div>
-        <div id="archive-empty" class="empty-state" style="display:none;">
-          <div class="empty-icon">🕊️</div>
-          <p id="archive-empty-text">Archive is empty.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ADD MODAL -->
-  <div id="modal-add" class="modal-overlay">
+  <!-- ── MODAL: Add Impulse ──────────────────────────────── -->
+  <div class="modal-overlay" id="modal-add"
+       role="dialog" aria-modal="true" aria-labelledby="modal-title" style="display:none">
     <div class="modal-sheet">
       <div class="modal-drag-handle"></div>
-      <h2 class="modal-title" id="modal-title">New Impulse</h2>
-      <p class="modal-hint" id="modal-hint">Describe what you want to buy and set a pause.</p>
+      <h3 class="modal-title" id="modal-title">Новий імпульс</h3>
+      <p class="modal-hint" id="modal-hint">Опиши, що хочеш купити, і встанови паузу.</p>
 
-      <div id="strict-notice" class="strict-notice" style="display:none;">
-        <span>🛡️</span>
-        <span id="strict-notice-text">Strict mode: skip is disabled</span>
+      <div class="strict-notice" id="strict-notice" style="display:none" role="alert">
+        <svg width="13" height="13" viewBox="0 0 24 24"
+             fill="rgba(255,68,68,0.5)" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+        <span id="strict-notice-text">Суворий режим: відмова недоступна</span>
       </div>
 
-      <label class="field-label" id="label-text">What do you want to buy?</label>
-      <input id="input-text" class="field-input" placeholder="New headphones, a game..." type="text">
+      <label class="field-label" for="input-text" id="label-text">Що ти хочеш купити?</label>
+      <input class="field-input" id="input-text" type="text"
+             placeholder="Нові навушники, гра..." autocomplete="off" maxlength="80" />
 
-      <label class="field-label" id="label-amount">Amount ($)</label>
-      <input id="input-amount" class="field-input" type="number" placeholder="0">
+      <label class="field-label" for="input-amount" id="label-amount">Сума (₴)</label>
+      <input class="field-input" id="input-amount" type="number"
+             placeholder="0" min="0" step="1" inputmode="decimal" />
 
-      <label class="field-label" id="label-delay">Delay before purchase</label>
+      <label class="field-label" id="label-delay">Затримка перед покупкою</label>
       <div class="delay-grid">
-        <button class="delay-chip active" data-hours="1" id="delay-1h">1 hr</button>
-        <button class="delay-chip" data-hours="6" id="delay-6h">6 hr</button>
-        <button class="delay-chip" data-hours="24" id="delay-24h">24 hr</button>
-        <button class="delay-chip" data-hours="72" id="delay-72h">3 days</button>
-        <button class="delay-chip" data-hours="168" id="delay-168h">7 days</button>
-        <button class="delay-chip" data-hours="720" id="delay-720h">30 days</button>
+        <button class="delay-chip active" data-hours="1"   id="delay-1h">1 год</button>
+        <button class="delay-chip"        data-hours="6"   id="delay-6h">6 год</button>
+        <button class="delay-chip"        data-hours="24"  id="delay-24h">24 год</button>
+        <button class="delay-chip"        data-hours="72"  id="delay-72h">3 дні</button>
+        <button class="delay-chip"        data-hours="168" id="delay-168h">7 днів</button>
+        <button class="delay-chip"        data-hours="720" id="delay-720h">30 днів</button>
       </div>
 
       <div class="modal-actions">
-        <button id="btn-cancel-modal" class="btn-secondary">Cancel</button>
-        <button id="btn-save-impulse" class="btn-primary">Lock 🔒</button>
+        <button class="btn-secondary" id="btn-cancel-modal">Скасувати</button>
+        <button class="btn-primary"   id="btn-save-impulse">Заблокувати 🔒</button>
       </div>
     </div>
   </div>
 
-  <!-- PRO MODAL -->
-  <div id="modal-pro" class="modal-overlay">
+  <!-- ── MODAL: Pro Upgrade ──────────────────────────────── -->
+  <div class="modal-overlay" id="modal-pro"
+       role="dialog" aria-modal="true" aria-labelledby="pro-title" style="display:none">
     <div class="modal-sheet modal-pro-sheet">
+      <div class="modal-drag-handle"></div>
       <div class="pro-star">⭐</div>
-      <h2 class="modal-title" id="pro-title">ImpulseBin Pro</h2>
-      <p class="pro-desc" id="pro-desc">Unlimited impulses and data export.</p>
-      <ul class="pro-features" id="pro-features"></ul>
-      <div class="modal-actions">
-        <button id="btn-pro-close" class="btn-secondary">Stay on Free</button>
-        <button id="btn-pro-buy" class="btn-primary btn-pro-cta">Upgrade to Pro</button>
+      <h3 class="modal-title" id="pro-title">ImpulseBin Pro</h3>
+      <p class="pro-desc" id="pro-desc">Безлімітні імпульси та експорт даних.</p>
+      <ul class="pro-features" id="pro-features">
+        <li>✅ Необмежена кількість імпульсів</li>
+        <li>✅ Детальна статистика</li>
+        <li>✅ Розширений експорт JSON</li>
+        <li>✅ Без реклами назавжди</li>
+        <li>✅ Преміум дизайн</li>
+      </ul>
+      <button class="btn-primary btn-pro-cta" id="btn-pro-buy">Оновити до Pro</button>
+      <button class="btn-ghost" id="btn-pro-close">Залишитись у Free</button>
+    </div>
+  </div>
+
+  <!-- ── MODAL: Limit Reached (Watch Ad / Go Pro) ────────── -->
+  <div class="modal-overlay" id="modal-limit"
+       role="dialog" aria-modal="true" aria-labelledby="limit-modal-title" style="display:none">
+    <div class="modal-sheet modal-pro-sheet">
+      <div class="modal-drag-handle"></div>
+      <div class="limit-icon">🔒</div>
+      <h3 class="modal-title" id="limit-modal-title">Ліміт вичерпано</h3>
+      <p class="pro-desc" id="limit-modal-desc">Безкоштовно доступно 3 активних імпульси.</p>
+
+      <button class="btn-watch-ad" id="btn-watch-ad">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        <span id="btn-watch-ad-label">▶️ Переглянути рекламу (+1 слот)</span>
+      </button>
+      <p class="limit-maxed-note" id="limit-maxed-note" style="display:none">Максимум додаткових слотів досягнуто (10/10).</p>
+
+      <button class="btn-primary btn-pro-cta" id="btn-limit-upgrade">
+        <span id="btn-limit-upgrade-label">⭐ Перейти на Pro — без лімітів</span>
+      </button>
+      <button class="btn-ghost" id="btn-limit-cancel">Скасувати</button>
+    </div>
+  </div>
+
+  <!-- ── MODAL: Reset Progress Confirmation ──────────────── -->
+  <div class="modal-overlay modal-overlay-center" id="modal-reset-confirm"
+       role="alertdialog" aria-modal="true" aria-labelledby="reset-confirm-title" style="display:none">
+    <div class="confirm-popup">
+      <div class="confirm-icon">🧹</div>
+      <h3 class="modal-title" id="reset-confirm-title">Точно скинути?</h3>
+      <p class="confirm-desc" id="reset-confirm-desc">Цю дію неможливо скасувати.</p>
+      <div class="confirm-actions">
+        <button class="btn-ghost" id="btn-reset-cancel">Залишити</button>
+        <button class="btn-danger-full" id="btn-reset-confirm">Так, скинути</button>
       </div>
     </div>
   </div>
 
-  <!-- TOAST -->
-  <div id="toast" class="toast"></div>
+  <!-- ── MODAL: Achievement Unlocked ────────────────────── -->
+  <div class="modal-overlay modal-overlay-center" id="modal-achievement"
+       role="alertdialog" aria-modal="true" style="display:none">
+    <div class="achievement-popup">
+      <div class="ach-glow"></div>
+      <div class="ach-header" id="ach-unlock-label">🏆 Ачівмент розблоковано!</div>
+      <div class="ach-emoji-big" id="ach-emoji">🍦</div>
+      <div class="ach-popup-title" id="ach-title">На морозиво!</div>
+      <div class="ach-popup-desc"  id="ach-desc">Ви зберегли $100</div>
+      <button class="btn-primary btn-ach-ok" id="btn-ach-close">Супер! 🎉</button>
+    </div>
+  </div>
+
+  <!-- ── TOAST ──────────────────────────────────────────── -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script src="app.js"></script>
 </body>
-</html>  
+</html>
